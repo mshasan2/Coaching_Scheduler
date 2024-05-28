@@ -46,83 +46,105 @@ const CoachDashboard = () => {
 
   return (
     <div>
-      <h2>Coach Dashboard</h2>
       <div>
-        <h4>Coach Selection</h4>
-        <select onChange={handleCoachChange}>
-          <option value="1">Coach 1</option>
-          <option value="2">Coach 2</option>
-          <option value="3">Coach 3</option>
-        </select>
+        <span className='h2'>Coach Dashboard</span>
+        <span className='float-end'>
+          <span className='h4 pe-2'>Coach Selection</span>
+          <select onChange={handleCoachChange}>
+            <option value="1">Coach 1</option>
+            <option value="2">Coach 2</option>
+            <option value="3">Coach 3</option>
+          </select>
+          
+        </span>
       </div>
 
-      <div className="mb-4">
+      <div className="m-4 p-2 ">
         <h4>Add Availability Slot</h4>
-        <label>Start Time: 
-          <input
-            name='start_time'
-            type="datetime-local"
-            value={startTime}
-            onChange={e => setStartTime(e.target.value)}
-          />
-        </label>
-        <button className="btn btn-primary" onClick={handleAddSlot}>Add Slot</button>
+        <div className='row'>
+
+          <label className='col-form-label col-1'>Start Time </label>
+          <div className='col-6'>
+            <input
+              id='start_time'
+              className='form-control'
+              name='start_time'
+              type="datetime-local"
+              value={startTime}
+              onChange={e => setStartTime(e.target.value)}
+            />
+          </div>
+          
+          <button className="btn btn-primary col-2" onClick={handleAddSlot}>Add Slot</button>
+        </div>
       </div>
 
-      <div className="mb-4">
+      <div className="ms-4 me-4 mb-4">
         <h4>Upcoming Slots</h4>
-        <ul>
+        <ul className='m-2 list-group'>
           {slots.map(slot => (
-            <li key={slot.id}>
-              {new Date(slot.start_time).toLocaleString()} - {new Date(slot.end_time).toLocaleString()}
-              <br />Student: {slot.student ? slot.student.name : 'Not booked'}
-              <br />Phone: {slot.student ? slot.student.phone_number : 'N/A'}
+            <li className='list-group-item list-group-item-secondary' key={slot.id}>
+              <strong>Slot:</strong> {new Date(slot.start_time).toLocaleString()} - {new Date(slot.end_time).toLocaleString()}
+              <br /> <strong>Student: </strong> {slot.student ? slot.student.name : 'Not booked'}
+              <br /><strong> Phone: </strong> {slot.student ? slot.student.phone_number : 'N/A'}
             </li>
           ))}
         </ul>
       </div>
 
-      <div className="mb-4">
+      <div className="m-4">
         <h4>Record Student Satisfaction</h4>
-        <select onChange={e => setSelectedSlot(coachPastSlots.find(slot => slot.id === parseInt(e.target.value)))}>
-          <option value="">Select a slot</option>
-          {coachPastSlots.map(slot => (
-            <option key={slot.id} value={slot.id}>
-              {new Date(slot.start_time).toLocaleString()} - {new Date(slot.end_time).toLocaleString()}
-            </option>
-          ))}
-        </select>
-        <br />
-        <input
-          type="number"
-          value={satisfaction}
-          onChange={e => setSatisfaction(e.target.value)}
-          placeholder="Satisfaction (1-5)"
-        />
-        
-        <textarea
-          value={notes}
-          onChange={e => setNotes(e.target.value)}
-          placeholder="Notes"
-        />
-        <button className="btn btn-primary" onClick={handleAddReview}>Add Review</button>
+        <div className='form-group row'>
+          <div className='col-4 m-2 '>
+          <select className='form-select' onChange={e => setSelectedSlot(coachPastSlots.find(slot => slot.id === parseInt(e.target.value)))}>
+            <option value="">Select a slot</option>
+            {coachPastSlots.map(slot => (
+              <option key={slot.id} value={slot.id}>
+                {new Date(slot.start_time).toLocaleString()} - {new Date(slot.end_time).toLocaleString()}
+              </option>
+            ))}
+          </select>
+          </div>
+          <div className='col-4 m-2'>
+          <input
+            className='form-control'
+            type="number"
+            value={satisfaction}
+            onChange={e => setSatisfaction(e.target.value)}
+            placeholder="Satisfaction (1-5)"
+          />
+          </div>
+          <div className='row'>
+          <div className='col-4 m-2 pe-1'>
+            <textarea
+              className='form-control'
+              value={notes}
+              onChange={e => setNotes(e.target.value)}
+              placeholder="Notes"
+            />
+          </div>
+          <div className='col-4 ps-4  m-2'>
+          <button className="btn btn-primary" onClick={handleAddReview}>Add Review</button>
+          </div>
+          </div>
+        </div>
       </div>
 
-      <div>
+      <div className="m-4">
         <h4>Past Reviews</h4>
-        <ul>
+        <ul className='m-2 list-group'>
           {reviews.map(review => (
             
-            <li key={review.id}>
+            <li className='list-group-item list-group-item-secondary' key={review.id}>
               
-                <br/>Slot:
+              <strong>Slot: </strong>
                 
                 {(review.start_time && new Date(review.start_time).toLocaleString())|| 'Loading...'}
                 <span> - </span>
                 {(review.end_time && new Date(review.end_time).toLocaleString()) || 'Loading...'}
               
-              <br />Satisfaction: {(review.review && review.review.satisfaction) || 'Loading...'}
-              <br />Notes: {(review.review && review.review.notes) || 'Loading...'}
+              <br/> <strong>Satisfaction: </strong>{(review.review && review.review.satisfaction) || 'Loading...'}
+              <br/> <strong>Notes: </strong>{(review.review && review.review.notes) || 'Loading...'}
             </li>
           ))}
         </ul>
