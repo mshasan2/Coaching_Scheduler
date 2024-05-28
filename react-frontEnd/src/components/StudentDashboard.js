@@ -12,7 +12,7 @@ const StudentDashboard = () => {
   useEffect(() => {
     dispatch(fetchAvailableSlots());
     dispatch(fetchStudentBookedSlots(studentId));
-  }, [dispatch]);
+  }, [dispatch, studentId]);
 
   const handleBookSlot = (slotId) => {
     dispatch(bookSlot(slotId, studentId));
@@ -20,43 +20,45 @@ const StudentDashboard = () => {
 
   const handleStudentChange = (e) => {
     setStudentId(e.target.value);
-    dispatch(fetchStudentBookedSlots(e.target.value));
+    //dispatch(fetchStudentBookedSlots(e.target.value));
   }
 
   return (
     <div>
-      <h2>Student Dashboard</h2>
       <div>
-        <h4>Student Selection</h4>
-        <select onChange={handleStudentChange}>
-          <option value="1">Student 1</option>
-          <option value="2">Student 2</option>
-          <option value="3">Student 3</option>
-        </select>
+        <span className='h2'>Student Dashboard</span>
+        <span className='float-end'>
+          <span className='h4 pe-2'>Student Selection</span>
+          <select onChange={handleStudentChange}>
+            <option value="1">Student 1</option>
+            <option value="2">Student 2</option>
+            <option value="3">Student 3</option>
+          </select>
+          
+        </span>
       </div>
-
-      <div>
+      
+      <div className="m-4">
         <h4>Available Slots</h4>
-        <ul>
+        <ul className='m-2 list-group'>
           {slots.map(slot => (
-            <li key={slot.id}>
-              
-              Coach: {slot.coach.name}
-              <br />Time: {new Date(slot.start_time).toLocaleString()} - {new Date(slot.end_time).toLocaleString()}
-              <br />Phone: {slot.coach.phone_number}
-              <button className="btn btn-primary" onClick={() => handleBookSlot(slot.id)}>Book Slot</button>
+            <li className='list-group-item list-group-item-secondary' key={slot.id}>
+              <strong>Coach: </strong>{slot.coach.name}
+              <br /><strong>Time: </strong>{new Date(slot.start_time).toLocaleString()} - {new Date(slot.end_time).toLocaleString()}
+              <br /><strong>Phone: </strong>{slot.coach.phone_number}
+              <br /><button className="btn btn-primary" onClick={() => handleBookSlot(slot.id)}>Book Slot</button>
             </li>
           ))}
         </ul>
       </div>
-      <div>
+      <div className="m-4">
         <h4>Booked Slots</h4>
-        <ul>
+        <ul className='m-2 list-group'>
           {studentBookedSlots.map(slot => (
-            <li key={slot.id}>
-              Coach: {slot.coach.name}
-              <br />Time: {new Date(slot.start_time).toLocaleString()} - {new Date(slot.end_time).toLocaleString()}
-              <br />Phone: {slot.coach.phone_number}
+            <li className='list-group-item list-group-item-secondary' key={slot.id}>
+              <strong>Coach: </strong>{slot.coach.name}
+              <br /><strong>Time: </strong>{new Date(slot.start_time).toLocaleString()} - {new Date(slot.end_time).toLocaleString()}
+              <br /><strong>Phone: </strong>{slot.coach.phone_number}
             </li>
           ))}
         </ul>
