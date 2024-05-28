@@ -83,7 +83,7 @@ const CoachDashboard = () => {
         <h4>Upcoming Slots</h4>
         <ul className='m-2 list-group'>
           {slots.map(slot => (
-            <li className='list-group-item list-group-item-secondary' key={slot.id}>
+            <li className='list-group-item list-group-item-secondary' key={'up'+slot.id}>
               <strong>Slot:</strong> {new Date(slot.start_time).toLocaleString()} - {new Date(slot.end_time).toLocaleString()}
               <br /> <strong>Student: </strong> {slot.student ? slot.student.name : 'Not booked'}
               <br /><strong> Phone: </strong> {slot.student ? slot.student.phone_number : 'N/A'}
@@ -135,7 +135,7 @@ const CoachDashboard = () => {
         <ul className='m-2 list-group'>
           {reviews.map(review => (
             
-            <li className='list-group-item list-group-item-secondary' key={review.id}>
+            <li className='list-group-item list-group-item-secondary' key={'re' + review.id}>
               
               <strong>Slot: </strong>
                 

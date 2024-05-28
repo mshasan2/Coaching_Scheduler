@@ -42,7 +42,7 @@ const StudentDashboard = () => {
         <h4>Available Slots</h4>
         <ul className='m-2 list-group'>
           {slots.map(slot => (
-            <li className='list-group-item list-group-item-secondary' key={slot.id}>
+            <li className='list-group-item list-group-item-secondary' key={'av' + slot.id}>
               <strong>Coach: </strong>{slot.coach.name}
               <br /><strong>Time: </strong>{new Date(slot.start_time).toLocaleString()} - {new Date(slot.end_time).toLocaleString()}
               <br /><strong>Phone: </strong>{slot.coach.phone_number}
@@ -55,7 +55,7 @@ const StudentDashboard = () => {
         <h4>Booked Slots</h4>
         <ul className='m-2 list-group'>
           {studentBookedSlots.map(slot => (
-            <li className='list-group-item list-group-item-secondary' key={slot.id}>
+            <li className='list-group-item list-group-item-secondary' key={'bk' + slot.id}>
               <strong>Coach: </strong>{slot.coach.name}
               <br /><strong>Time: </strong>{new Date(slot.start_time).toLocaleString()} - {new Date(slot.end_time).toLocaleString()}
               <br /><strong>Phone: </strong>{slot.coach.phone_number}
