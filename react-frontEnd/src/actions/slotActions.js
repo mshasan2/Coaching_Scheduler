@@ -6,7 +6,6 @@ export const fetchAvailableSlots = () => async dispatch => {
 };
 
 export const createSlot = (slot) => async dispatch => {
-  console.log('slot', slot);
   const res = await axios.post('http://localhost:3000/slots', slot);
   dispatch({ type: 'CREATE_SLOT', payload: res.data });
 }

@@ -8,10 +8,12 @@ const initialState = {
   
   const slotReducer = (state = initialState, action) => {
     switch (action.type) {
+      case 'CREATE_SLOT':
+        return { ...state, bookedSlots: [...state.bookedSlots, action.payload] };
       case 'FETCH_AVAILABLE_SLOTS':
         return { ...state, availableSlots: action.payload };
       case 'BOOK_SLOT':
-        return { ...state, bookedSlots: [...state.bookedSlots, action.payload] };
+        return { ...state, studentBookedSlots: [...state.studentBookedSlots, action.payload] };
       case 'FETCH_COACH_SLOTS':
         return { ...state, bookedSlots: action.payload };
       case 'FETCH_COACH_REVIEWS':

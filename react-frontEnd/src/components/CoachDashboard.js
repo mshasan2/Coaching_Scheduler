@@ -13,8 +13,8 @@ const CoachDashboard = () => {
 //   const slots = useSelector(state => state.slots.bookedSlots);
 //   const reviews = useSelector(state => state.slots.reviews);
 
-  const slots = useSelector(state => state.slots.bookedSlots || []);
-  const reviews = useSelector(state => state.slots.reviews || []);
+  let slots = useSelector(state => state.slots.bookedSlots || []);
+  let reviews = useSelector(state => state.slots.reviews || []);
   const coachPastSlots = useSelector(state => state.slots.coachPastSlots || []);
 
   useEffect(() => {
@@ -24,19 +24,34 @@ const CoachDashboard = () => {
   }, [dispatch, coachId]);
 
   const handleAddSlot = () => {
-    // Logic to add a new slot (handled via backend API call)
-    // Reset the start time field after submission\
-    dispatch(createSlot({coach_id: coachId, start_time: startTime}));
+    // if start date is in the past, raise alert
+    if ((!startTime) || new Date(startTime) < new Date()) {
+      alert('Invalid start time');
+      return;
+    }
+     dispatch(createSlot({coach_id: coachId, start_time: startTime}));
     setStartTime('');
   };
 
   const handleAddReview = () => {
+    // if no slot is selected, raise alert
+    if (!selectedSlot) {
+      alert('Please Select a slot');
+      return;
+    }
+
+    // if satisfaction is not between 1 and 5, raise alert
+    if (!satisfaction || satisfaction < 1 || satisfaction > 5) {
+      alert('Invalid Satisfaction value');
+      return;
+    }
+
     if (selectedSlot) {
-      console.log('selectedSlot', selectedSlot.id, satisfaction, notes);
       dispatch(addReview(selectedSlot.id, { satisfaction, notes }));
+      setSelectedSlot(null)
       setSatisfaction('');
       setNotes('');
-      setSelectedSlot(null);
+      ;
     }
   };
 
@@ -96,6 +111,7 @@ const CoachDashboard = () => {
         <h4>Record Student Satisfaction</h4>
         <div className='form-group row'>
           <div className='col-4 m-2 '>
+          {/* Select should reset after Add Review has been clicked */}
           <select className='form-select' onChange={e => setSelectedSlot(coachPastSlots.find(slot => slot.id === parseInt(e.target.value)))}>
             <option value="">Select a slot</option>
             {coachPastSlots.map(slot => (
@@ -104,6 +120,7 @@ const CoachDashboard = () => {
               </option>
             ))}
           </select>
+         
           </div>
           <div className='col-4 m-2'>
           <input
@@ -133,19 +150,18 @@ const CoachDashboard = () => {
       <div className="m-4">
         <h4>Past Reviews</h4>
         <ul className='m-2 list-group'>
+          
           {reviews.map(review => (
-            
-            <li className='list-group-item list-group-item-secondary' key={'re' + review.id}>
-              
+            review && review.review ?
+            (<li className='list-group-item list-group-item-secondary' key={'re' + review.review.id}>              
               <strong>Slot: </strong>
-                
                 {(review.start_time && new Date(review.start_time).toLocaleString())|| 'Loading...'}
                 <span> - </span>
                 {(review.end_time && new Date(review.end_time).toLocaleString()) || 'Loading...'}
               
               <br/> <strong>Satisfaction: </strong>{(review.review && review.review.satisfaction) || 'Loading...'}
               <br/> <strong>Notes: </strong>{(review.review && review.review.notes) || 'Loading...'}
-            </li>
+            </li>): null
           ))}
         </ul>
       </div>

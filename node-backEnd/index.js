@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { Sequelize, DataTypes } = require('sequelize');
+const e = require('express');
 
 const app = express();
 app.use(bodyParser.json());
@@ -103,8 +104,9 @@ app.post('/slots', async (req, res) => {
     const end_time = new Date(new Date(start_time).getTime() + 2 * 60 * 60 * 1000);
   
     try {
-      console.log("slot add", { coach_id, start_time, end_time });
-      const slot = await Slot.create({ coach_id, start_time, end_time });
+      let slot = await Slot.create({ coach_id, start_time, end_time });
+      slot.student_id = null;
+      slot.student = null;
       res.status(201).json(slot);
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -131,13 +133,21 @@ app.post('/slots', async (req, res) => {
   app.post('/slots/:id/book', async (req, res) => {
     const slotId = req.params.id;
     const { student_id } = req.body;
-  
     try {
       const slot = await Slot.findByPk(slotId);
       if (slot) {
         slot.student_id = student_id;
+        // fetch coach details
+        const coach = await Coach.findByPk(slot.coach_id);
+        let newSlot = {
+          id: slot.id, 
+          coach_id: slot.coach_id,
+          start_time: slot.start_time, 
+          end_time: slot.end_time, 
+          student_id: student_id, 
+          coach: coach};
         await slot.save();
-        res.status(200).json(slot);
+        res.status(200).json(newSlot);
       } else {
         res.status(404).json({ error: 'Slot not found' });
       }
@@ -186,10 +196,11 @@ app.post('/slots', async (req, res) => {
   app.post('/slots/:id/review', async (req, res) => {
     const slotId = req.params.id;
     const { satisfaction, notes } = req.body;
-  
     try {
-      const review = await Review.create({ slot_id: slotId, satisfaction, notes });
-      res.status(201).json(review);
+      let review = await Review.create({ slot_id: slotId, satisfaction, notes });
+      const slot = await Slot.findByPk(slotId);
+      let newReview = {id: review.id, start_time: slot.start_time, end_time: slot.end_time, coach_id: slot.coach_id, student_id: slot.student_id, review: review}
+      res.status(201).json(newReview);
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
@@ -224,7 +235,9 @@ app.get('/coaches/:id/pastSlots', async (req, res) => {
       });
       slots = slots.filter(slot => slot.start_time < new Date());
       slots = slots.filter(slot => slot.student_id !== null);
-
+      let reviews = await Review.findAll();
+      reviews = reviews.map(review => review.slot_id);
+      slots = slots.filter(slot => !reviews.includes(slot.id));
       // Sorting by start time
       slots = slots.sort((a, b) => a.start_time - b.start_time);
       res.status(200).json(slots);

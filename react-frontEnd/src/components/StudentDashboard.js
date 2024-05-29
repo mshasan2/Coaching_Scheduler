@@ -20,7 +20,6 @@ const StudentDashboard = () => {
 
   const handleStudentChange = (e) => {
     setStudentId(e.target.value);
-    //dispatch(fetchStudentBookedSlots(e.target.value));
   }
 
   return (
@@ -55,6 +54,7 @@ const StudentDashboard = () => {
         <h4>Booked Slots</h4>
         <ul className='m-2 list-group'>
           {studentBookedSlots.map(slot => (
+            
             <li className='list-group-item list-group-item-secondary' key={'bk' + slot.id}>
               <strong>Coach: </strong>{slot.coach.name}
               <br /><strong>Time: </strong>{new Date(slot.start_time).toLocaleString()} - {new Date(slot.end_time).toLocaleString()}
