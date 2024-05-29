@@ -8,6 +8,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+// Database connection
+// Update the username and password as per your MySQL credentials
 const sequelize = new Sequelize('coach_student_db', 'root', 'root', {
   host: 'localhost',
   dialect: 'mysql'
