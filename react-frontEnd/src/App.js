@@ -1,12 +1,12 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import store from './store';
-import './vendors/bootstrap-5.0.2/dist/css/bootstrap.min.css';
-import Navbar from './components/Navbar';
-import HomePage from './components/HomePage';
-import CoachDashboard from './components/CoachDashboard';
-import StudentDashboard from './components/StudentDashboard';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./store";
+import "./vendors/bootstrap-5.0.2/dist/css/bootstrap.min.css";
+import Navbar from "./components/Navbar";
+import HomePage from "./components/HomePage";
+import CoachDashboard from "./components/CoachDashboard";
+import StudentDashboard from "./components/StudentDashboard";
 
 function App() {
   return (
